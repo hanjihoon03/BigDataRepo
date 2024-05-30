@@ -1,7 +1,7 @@
 package com.example.bigdataboost.redistest;
 
 import com.example.bigdataboost.controller.UserController;
-import com.example.bigdataboost.model.User;
+import com.example.bigdataboost.model.UserEntity;
 import com.example.bigdataboost.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
-public class UserControllerTest {
+public class UserEntityControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -29,8 +29,8 @@ public class UserControllerTest {
     void testGetUser() throws Exception {
         //given
         //사용자 서비스가 특정 ID를 가진 사용자를 반환하도록 설정
-        User user = new User("1", "Test", 10);
-        when(userService.getUserById("1")).thenReturn(Optional.of(user));
+        UserEntity userEntity = new UserEntity("1", "Test", 10);
+        when(userService.getUserById("1")).thenReturn(Optional.of(userEntity));
         //when
         //GET 요청을 /api/1 에 보내고 결과를 검증
         mockMvc.perform(get("/api/1"))
@@ -46,8 +46,8 @@ public class UserControllerTest {
     void testCreateUser() throws Exception {
         //given
         //사용자 서비스가 사용자를 저장하고 반환하도록 설정
-        User user = new User("1", "Test", 10);
-        when(userService.saveUser(any(User.class))).thenReturn(user);
+        UserEntity userEntity = new UserEntity("1", "Test", 10);
+        when(userService.saveUser(any(UserEntity.class))).thenReturn(userEntity);
         //when
         //POST 요청을 /api 에 JSON 본문과 함께 보내고 결과를 검증
         mockMvc.perform(post("/api")
@@ -59,7 +59,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.age").value(10));
         //then
         //saveUser 메소드가 정확히 한 번 호출되었는지 확인
-        verify(userService, times(1)).saveUser(any(User.class));
+        verify(userService, times(1)).saveUser(any(UserEntity.class));
     }
     @Test
     void testDeleteUser() throws Exception {

@@ -1,12 +1,12 @@
 package com.example.bigdataboost.repository;
 
-import com.example.bigdataboost.model.UserEntity;
+import com.example.bigdataboost.model.Member;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends CrudRepository<UserEntity, String> {
-    Optional<UserEntity> findByName(String name);
+public interface MemberRepository extends CrudRepository<Member, String> {
+    Optional<Member> findByMemberId(String username);
 }

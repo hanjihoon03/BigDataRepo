@@ -1,6 +1,6 @@
 package com.example.bigdataboost.redistest;
 
-import com.example.bigdataboost.model.User;
+import com.example.bigdataboost.model.UserEntity;
 import com.example.bigdataboost.repository.UserRepository;
 import com.example.bigdataboost.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 //redisUserServiceTest
-public class UserServiceTest {
+public class UserEntityServiceTest {
     @Mock
     private UserRepository userRepository;
 
@@ -30,12 +30,12 @@ public class UserServiceTest {
     @Test
     public void testGetUserById() {
         //given
-        User user = new User("1", "Test", 10);
+        UserEntity userEntity = new UserEntity("1", "Test", 10);
         //when
         //UserRepository의 findById 메서드가 호출되었을 때, 해당 User 객체를 반환하도록 설정
-        when(userRepository.findById("1")).thenReturn(Optional.of(user));
+        when(userRepository.findById("1")).thenReturn(Optional.of(userEntity));
 
-        Optional<User> foundUser = userService.getUserById("1");
+        Optional<UserEntity> foundUser = userService.getUserById("1");
 
         //then
         assertTrue(foundUser.isPresent());
@@ -46,17 +46,17 @@ public class UserServiceTest {
     @Test
     public void testSaveUser() {
         //given
-        User user = new User("1", "Test", 10);
+        UserEntity userEntity = new UserEntity("1", "Test", 10);
         //when
         //UserRepository의 save 메서드가 호출되었을 때, 해당 User 객체를 반환하도록 설정
-        when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity);
 
-        User savedUser = userService.saveUser(user);
+        UserEntity savedUserEntity = userService.saveUser(userEntity);
 
         //then
-        assertEquals("Test", savedUser.getName());
+        assertEquals("Test", savedUserEntity.getName());
         //UserRepository의 save 메서드가 한 번 호출되었는지 확인
-        verify(userRepository, times(1)).save(user);
+        verify(userRepository, times(1)).save(userEntity);
     }
     @Test
     public void testDeleteUser() {

@@ -1,6 +1,6 @@
 package com.example.bigdataboost.service;
 
-import com.example.bigdataboost.model.User;
+import com.example.bigdataboost.model.UserEntity;
 import com.example.bigdataboost.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -16,13 +16,13 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Cacheable(value = "userCache", key = "#id")
-    public Optional<User> getUserById(String id) {
+    public Optional<UserEntity> getUserById(String id) {
         return userRepository.findById(id);
     }
 
     @CacheEvict(value = "userCache", key = "#user.id")
-    public User saveUser(User user) {
-        return userRepository.save(user);
+    public UserEntity saveUser(UserEntity userEntity) {
+        return userRepository.save(userEntity);
     }
     @CacheEvict(value = "userCache", key = "#id")
     public void deleteUser(String id) {

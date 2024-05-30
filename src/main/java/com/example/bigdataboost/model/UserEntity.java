@@ -13,12 +13,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @RedisHash("User")
-public class User implements Serializable {
+public class UserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     private String id;
     private String name;
-    private String password;
     private int age;
 }

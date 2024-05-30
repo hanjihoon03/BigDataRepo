@@ -1,6 +1,6 @@
 package com.example.bigdataboost.redistest;
 
-import com.example.bigdataboost.model.User;
+import com.example.bigdataboost.model.UserEntity;
 import com.example.bigdataboost.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class UserControllerIntegrationTest {
+public class UserEntityControllerIntegrationTest {
 
     @LocalServerPort
     private int port;
@@ -37,11 +37,11 @@ public class UserControllerIntegrationTest {
     @Test
     void testGetUser() {
         // given
-        User user = new User("1", "Test", 10);
-        userRepository.save(user);
+        UserEntity userEntity = new UserEntity("1", "Test", 10);
+        userRepository.save(userEntity);
 
         // when
-        ResponseEntity<User> response = restTemplate.getForEntity(baseUrl + "/1", User.class);
+        ResponseEntity<UserEntity> response = restTemplate.getForEntity(baseUrl + "/1", UserEntity.class);
 
         // then
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
@@ -53,13 +53,13 @@ public class UserControllerIntegrationTest {
     @Test
     void testCreateUser() {
         // given
-        User user = new User("1", "Test", 10);
+        UserEntity userEntity = new UserEntity("1", "Test", 10);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<User> request = new HttpEntity<>(user, headers);
+        HttpEntity<UserEntity> request = new HttpEntity<>(userEntity, headers);
 
         // when
-        ResponseEntity<User> response = restTemplate.postForEntity(baseUrl, request, User.class);
+        ResponseEntity<UserEntity> response = restTemplate.postForEntity(baseUrl, request, UserEntity.class);
 
         // then
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
@@ -71,8 +71,8 @@ public class UserControllerIntegrationTest {
     @Test
     void testDeleteUser() {
         // given
-        User user = new User("1", "Test", 10);
-        userRepository.save(user);
+        UserEntity userEntity = new UserEntity("1", "Test", 10);
+        userRepository.save(userEntity);
 
         // when
         HttpHeaders headers = new HttpHeaders();
