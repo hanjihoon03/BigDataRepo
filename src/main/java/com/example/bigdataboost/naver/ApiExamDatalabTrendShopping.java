@@ -11,33 +11,27 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-@RequiredArgsConstructor
+
 public class ApiExamDatalabTrendShopping {
-    
-    private final NaverApiConfig naverApiConfig;
 
     public static void main(String[] args) {
 
 
-
-        String clientId = "YOUR_CLIENT_ID"; // 애플리케이션 클라이언트 아이디
-        String clientSecret = "YOUR_CLIENT_SECRET"; // 애플리케이션 클라이언트 시크릿
-
         String apiUrl = "https://openapi.naver.com/v1/datalab/shopping/categories";
 
         Map<String, String> requestHeaders = new HashMap<>();
-        requestHeaders.put("X-Naver-Client-Id", clientId);
-        requestHeaders.put("X-Naver-Client-Secret", clientSecret);
+        requestHeaders.put("X-Naver-Client-Id", "JYQrR3sWztZG9Os1VKWP");
+        requestHeaders.put("X-Naver-Client-Secret", "Dpg5ZhuYaX");
         requestHeaders.put("Content-Type", "application/json");
 
-        String requestBody = "{\"startDate\":\"2017-08-01\"," +
-                "\"endDate\":\"2017-09-30\"," +
+        String requestBody = "{\"startDate\":\"2024-05-30\"," +
+                "\"endDate\":\"2024-05-31\"," +
                 "\"timeUnit\":\"month\"," +
                 "\"category\":[{\"name\":\"패션의류\",\"param\":[\"50000000\"]}," +
-                "{\"name\":\"화장품/미용\",\"param\":[\"50000002\"]}]," +
-                "\"device\":\"pc\"," +
-                "\"ages\":[\"20\",\"30\"]," +
-                "\"gender\":\"f\"}";
+                "{\"name\":\"화장품/미용\",\"param\":[\"50000002\"]}],}";
+//                "\"device\":\"pc\"," +
+//                "\"ages\":[\"20\",\"30\"]," +
+//                "\"gender\":\"f\"}";
 
         String responseBody = post(apiUrl, requestHeaders, requestBody);
         System.out.println(responseBody);

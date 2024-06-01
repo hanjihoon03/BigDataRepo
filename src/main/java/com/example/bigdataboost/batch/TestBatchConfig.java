@@ -30,17 +30,17 @@ public class TestBatchConfig {
     private final MemberRepository memberRepository;
     // 배치 작업을 정의하는 메소드
     @Bean
-    public Job shoppingDataJob(JobRepository jobRepository, Step shoppingDataStep) throws Exception {
+    public Job shoppingDataJob(JobRepository jobRepository, Step testStep) throws Exception {
         return new JobBuilder("addMember", jobRepository)
                 .incrementer(new RunIdIncrementer()) // Job 실행마다 고유한 ID를 생성하여 식별
-                .start(shoppingDataStep) // 해당 스텝부터 배치 작업 시작
+                .start(testStep) // 해당 스텝부터 배치 작업 시작
                 .build();
     }
 
     // 배치 스텝을 정의하는 메소드
     @Bean
     @JobScope
-    public Step shoppingDataStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) throws Exception {
+    public Step testStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) throws Exception {
         return new StepBuilder("addStep", jobRepository)
                 .<Member, Member>chunk(10, transactionManager) // 10개씩 묶어서 처리하는 청크 기반의 스텝
                 .reader(memberItemReader()) // 아이템을 읽어오는 리더 설정
