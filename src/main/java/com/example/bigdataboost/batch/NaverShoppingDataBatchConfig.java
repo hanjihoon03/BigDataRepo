@@ -23,7 +23,7 @@ public class NaverShoppingDataBatchConfig {
 
     @Bean
     public Job naverShoppingDataGet(JobRepository jobRepository, Step shoppingDataStep) throws Exception {
-        return new JobBuilder("getData", jobRepository)
+        return new JobBuilder("shoppingDataJob", jobRepository)
                 .incrementer(new RunIdIncrementer()) // Job 실행마다 고유한 ID를 생성하여 식별
                 .start(shoppingDataStep) // 해당 스텝부터 배치 작업 시작
                 .build();
@@ -32,7 +32,7 @@ public class NaverShoppingDataBatchConfig {
     @Bean
     @JobScope
     public Step shoppingDataStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
-        return new StepBuilder("getDataStep",jobRepository)
+        return new StepBuilder("shoppingDataStep",jobRepository)
                 .<NaverShoppingResponse,NaverShoppingResponse>chunk(1,transactionManager)
                 .reader(readNaverData())
                 .writer(writeNaverData())

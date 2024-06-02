@@ -1,6 +1,11 @@
 package com.example.bigdataboost.service;
 
 import com.example.bigdataboost.config.NaverApiConfig;
+import com.example.bigdataboost.model.NaverShoppingResponse;
+import com.example.bigdataboost.repository.NaverRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -8,10 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,12 +21,14 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class NaverService {
+    private final NaverRepository naverRepository;
     private final String seoulKey = "4f6a7963707261693537756f6b4379";
 
     private final NaverApiConfig naverApiConfig;
@@ -47,9 +51,9 @@ public class NaverService {
 
 
         Map<String, Object> bodyMap = new HashMap<>();
-        bodyMap.put("startDate", "2024-05-01");
+        bodyMap.put("startDate", formattedOneDayBefore);
         bodyMap.put("endDate", formattedDate);
-        bodyMap.put("timeUnit", "month");
+        bodyMap.put("timeUnit", "date");
         bodyMap.put("category", "50000167");
 
 
@@ -59,11 +63,33 @@ public class NaverService {
         RestTemplate restTemplate = new RestTemplate();
 
         try {
-            ResponseEntity<String> response = restTemplate.exchange(new URI(apiUrl), HttpMethod.POST, entity, String.class);
-            return response.getBody();
+            ResponseEntity<String> response = restTemplate.exchange(
+                    new URI(apiUrl), HttpMethod.POST, entity, String.class);
+
+            // JSON 응답을 로그로 출력
+            log.info("response body: {}", response.getBody());
+
+            // JSON 문자열을 NaverShoppingResponse 객체로 변환
+            ObjectMapper objectMapper = new ObjectMapper();
+            NaverShoppingResponse naverShoppingResponse = objectMapper.readValue(response.getBody(), NaverShoppingResponse.class);
+            naverRepository.save(naverShoppingResponse);
+
+
+            // 변환된 객체를 로그로 출력 (디버깅용)
+            log.info("naverShoppingResponse: {}", naverShoppingResponse);
+
+            return naverShoppingResponse.toString();
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
+        } catch (JsonMappingException e) {
+            throw new RuntimeException(e);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    public List<NaverShoppingResponse> findAllNaver() {
+        return naverRepository.findAllNaver();
     }
 
 

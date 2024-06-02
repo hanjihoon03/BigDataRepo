@@ -12,6 +12,6 @@ public class ShoppingData {
 
     private String period;
     private String group;
-    private String ratio;
+    private double ratio;
 
 }

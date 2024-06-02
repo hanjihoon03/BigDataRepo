@@ -19,10 +19,11 @@ import java.util.List;
 public class NaverShoppingResponse {
 
     @Id
-    @Column(updatable = false, unique = true, nullable = false)
     private String id;
-    private String title;
+    private String startDate;
+    private String endDate;
+    private String timeUnit;
     @Builder.Default
-    private List<ShoppingData> data = new ArrayList<>();
+    private List<ShoppingResult> results = new ArrayList<>();
 
 }
