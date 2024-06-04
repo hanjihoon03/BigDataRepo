@@ -2,6 +2,7 @@ package com.example.bigdataboost.service;
 
 import com.example.bigdataboost.config.NaverApiConfig;
 import com.example.bigdataboost.model.NaverShoppingResponse;
+import com.example.bigdataboost.model.submodel.Category;
 import com.example.bigdataboost.repository.NaverRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -34,7 +35,7 @@ public class NaverService {
     private final NaverApiConfig naverApiConfig;
     private String apiUrl = "https://openapi.naver.com/v1/datalab/shopping/category/age";
 
-    public String getSettingParam() {
+    public String getShoppingDataSet(Category category) {
         // 한국 시간대의 현재 시간을 가져옴
         ZonedDateTime nowInKorea = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 
@@ -54,7 +55,7 @@ public class NaverService {
         bodyMap.put("startDate", formattedOneDayBefore);
         bodyMap.put("endDate", formattedDate);
         bodyMap.put("timeUnit", "date");
-        bodyMap.put("category", "50000167");
+        bodyMap.put("category", category.getCode());
 
 
         HttpHeaders headers = getHeaders();
@@ -72,6 +73,7 @@ public class NaverService {
             // JSON 문자열을 NaverShoppingResponse 객체로 변환
             ObjectMapper objectMapper = new ObjectMapper();
             NaverShoppingResponse naverShoppingResponse = objectMapper.readValue(response.getBody(), NaverShoppingResponse.class);
+            naverShoppingResponse.setId(category.name());
             naverRepository.save(naverShoppingResponse);
 
 
