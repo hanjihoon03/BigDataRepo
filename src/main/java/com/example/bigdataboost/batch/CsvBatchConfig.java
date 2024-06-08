@@ -18,12 +18,7 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.batch.item.file.FlatFileItemWriter;
-import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
-import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
-import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
-import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -70,7 +65,6 @@ public class CsvBatchConfig {
         lineMapper.setLineTokenizer(new DelimitedLineTokenizer() { // DelimitedLineTokenizer 설정
             {
                 setDelimiter(","); // 쉼표로 구분
-                setQuoteCharacter('\"'); // 따옴표로 묶인 필드 처리
                 setNames("signature", "lastName", "firstName", "position", "birthYear", "debutYear"); // 각 필드 이름 설정
             }
         });

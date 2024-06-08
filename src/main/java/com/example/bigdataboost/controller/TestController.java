@@ -1,5 +1,6 @@
 package com.example.bigdataboost.controller;
 
+import com.example.bigdataboost.etc.MessageQue;
 import com.example.bigdataboost.model.NaverShoppingResponse;
 import com.example.bigdataboost.service.NaverService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,8 @@ import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
+import org.springframework.boot.autoconfigure.batch.BatchProperties;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +33,8 @@ public class TestController {
     private final JobRegistry jobRegistry;  // Job 레지스트리 주입
 
     private final NaverService naverService;
+    private final MessageQue messageQue;
+    private final Environment env;
 
 //    @GetMapping("/naver")
 //    public ResponseEntity<String> naverTest() {
@@ -44,7 +49,7 @@ public class TestController {
 
     @GetMapping("naver/shopping")
     public void naverShoppingmallGetData() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException, NoSuchJobException {
-        Job processJob = jobRegistry.getJob("shoppingDataJob");
+        Job processJob = jobRegistry.getJob(env.getProperty("spring.batch.job.name"));
 
         // Job을 실행할 때 필요한 JobParameters 생성
         JobParameters jobParameters = new JobParametersBuilder().toJobParameters();
@@ -63,4 +68,11 @@ public class TestController {
         jobLauncher.run(processJob, jobParameters);
         return "OK";
     }
+
+    @GetMapping("/message")
+    public String getMessage() {
+        String message = messageQue.getMessage();
+        return message != null ? message : "발행된 메시지가 없습니다.";
+    }
+
 }

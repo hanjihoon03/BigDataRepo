@@ -25,4 +25,14 @@ public class NaverShoppingResponse {
     @Builder.Default
     private List<ShoppingResult> results = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return "NaverShoppingResponse{" +
+                "id='" + id + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", timeUnit='" + timeUnit + '\'' +
+                ", results=" + results +
+                '}';
+    }
 }

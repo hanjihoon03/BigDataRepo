@@ -30,7 +30,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class NaverService {
     private final NaverRepository naverRepository;
-    private final String seoulKey = "4f6a7963707261693537756f6b4379";
+    private final KafkaProducerService kafkaProducerService;
 
     private final NaverApiConfig naverApiConfig;
     private String apiUrl = "https://openapi.naver.com/v1/datalab/shopping/category/age";
@@ -78,7 +78,8 @@ public class NaverService {
 
 
             // 변환된 객체를 로그로 출력 (디버깅용)
-            log.info("naverShoppingResponse: {}", naverShoppingResponse);
+//            log.info("naverShoppingResponse: {}", naverShoppingResponse);
+            kafkaProducerService.sendMessageToKafka(naverShoppingResponse.toString(),nowInKorea);
 
             return naverShoppingResponse.toString();
         } catch (URISyntaxException e) {
